@@ -10,19 +10,28 @@ const reactive = function (Object){
   return new Proxy(Object,{
     // 读取操作
     get(targetObj,key){
-      console.log('get',targetObj,key)
       return targetObj[key]
     },
     // 更新操作
     set(targetObj,key,value){
-      console.log('set',targetObj,key,value)
+      for(const item of handleList){
+        targetObj[key] = value
+        effect(item)
+      }
       return targetObj[key] = value
     }
   })
 }
-const effect = function (){
-  
+// 副作用函数
+// 副作用函数一开始直接调用一次
+// 当响应式对象a发生改变的时候会再次调用
+const effect = function (handle){
+  handle()
+  handleList.add(handle)
 }
+// 设置一个全局变量来存放副作用函数的handle 并且其值还不能重复
+// 因此采用Set数据结构来存放
+let handleList = new Set()
 module.exports = {
   reactive,
   effect

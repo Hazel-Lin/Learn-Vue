@@ -36,26 +36,33 @@
 // a.value = 11
 
 
-// 模拟V3的做法
-const { reactive,effect } = require('./myReactivity.js') 
+// 模拟V3的做法 简单粗暴的做了一下 虽说能够实现响应式的功能 但还有很多需要优化的细节
+// 并且只针对了其中的某一个值
+// const { reactive,effect } = require('./myReactivity.js') 
+// let a = reactive({
+//   value:10,
+// });
+
+// let b;
+// effect(()=>{
+//   b = a.value + 1
+//   console.log(b,'b')
+// })
+// a.value = 11
+
+
+// V3 优化实现
+const { reactive,effect } = require('./core/reactivity') 
 let a = reactive({
   value:10,
 });
 
 let b;
-// effect(()=>{
-//   b = a.value + 1
-// })
-// console.log(b) // 11
-// a.value = 11
-// console.log(b) // 12
-
-
-
-
-
-
-
+effect(()=>{
+  b = a.value + 30
+  console.log(b,'b')
+})
+a.value = 20
 
 // v2中的做法
 
